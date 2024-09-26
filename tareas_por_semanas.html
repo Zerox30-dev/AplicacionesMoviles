@@ -85,41 +85,25 @@
       {
         semana: 1,
         tareas: [
-          { id: 1, descripcion: "elaborar una infografía para el archivo semana01, empleando las diferentes aplicaciones online que permiten crear infografías", archivo: "semana01.pdf" },          
+          { id: 1, descripcion: "elaborar una infografía para el archivo “semana01”, empleando las diferentes aplicaciones online que permiten crear infografías", completada: false },          
         ]
       },
       {
         semana: 2,
         tareas: [
-          { id: 2, descripcion: "Como instalar Flutter", archivo: "semana02.docx" },
+          { id: 2, descripcion: "Como instalar Flutter", completada: false },
+          
         ]
       },
       {
         semana: 3,
         tareas: [
-          { id: 3, descripcion: "Ejercicio1", archivo: "ejercicio1.dart" },
-          { id: 4, descripcion: "Ejercicio2", archivo: "ejercicio2.dart" },
-          { id: 5, descripcion: "Ejercicio3", archivo: "ejercicio3.dart" }
+          { id: 3, descripcion: "Ejercicio1", completada: false },
+          { id: 4, descripcion: "Ejercicio2", completada: false },
+          { id: 5, descripcion: "Ejercicio3", completada: false }
         ]
       }
     ];
-
-    const GITHUB_REPO_URL = 'https://github.com/tu-usuario/tu-repositorio/blob/main/tareas/';
-
-    function getFileIcon(fileName) {
-      const extension = fileName.split('.').pop().toLowerCase();
-      switch (extension) {
-        case 'pdf':
-          return 'far fa-file-pdf';
-        case 'docx':
-        case 'doc':
-          return 'far fa-file-word';
-        case 'dart':
-          return 'fas fa-code';
-        default:
-          return 'far fa-file';
-      }
-    }
 
     function generarTareas() {
       const container = document.getElementById('tareas-container');
@@ -134,10 +118,8 @@
           <div class="tareas">
             ${semana.tareas.map(tarea => `
               <div class="tarea">
-                <a href="${GITHUB_REPO_URL}${tarea.archivo}" target="_blank">
-                  <i class="archivo-icon ${getFileIcon(tarea.archivo)}"></i>
-                  ${tarea.descripcion}
-                </a>
+                <input type="checkbox" id="tarea-${tarea.id}" ${tarea.completada ? 'checked' : ''}>
+                <label for="tarea-${tarea.id}">${tarea.descripcion}</label>
               </div>
             `).join('')}
             <div class="progreso-semana">
@@ -148,7 +130,7 @@
         container.appendChild(semanaElement);
       });
 
-      // Funcionalidad de acordeón (sin cambios)
+      // Funcionalidad de acordeón
       const titulos = document.querySelectorAll('.semana-titulo');
       titulos.forEach(titulo => {
         titulo.addEventListener('click', () => {
@@ -163,6 +145,29 @@
           }
         });
       });
+
+      // Marcar tareas como completadas y actualizar progreso
+      const checkboxes = document.querySelectorAll('.tarea input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const label = e.target.nextElementSibling;
+          const semana = e.target.closest('.semana');
+          if (e.target.checked) {
+            label.classList.add('tarea-completada');
+          } else {
+            label.classList.remove('tarea-completada');
+          }
+          actualizarProgreso(semana);
+        });
+      });
+    }
+
+    function actualizarProgreso(semana) {
+      const totalTareas = semana.querySelectorAll('.tarea').length;
+      const tareasCompletadas = semana.querySelectorAll('.tarea input[type="checkbox"]:checked').length;
+      const porcentaje = (tareasCompletadas / totalTareas) * 100;
+      const barra = semana.querySelector('.progreso-barra');
+      barra.style.width = `${porcentaje}%`;
     }
 
     // Generar tareas al cargar la página
