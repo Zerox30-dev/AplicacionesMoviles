@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tareas por Semanas - Programación de Aplicaciones Móviles Web</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .semana {
+      margin-bottom: 20px;
+    }
+    .semana-titulo {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .semana-titulo:hover {
+      background-color: #0056b3;
+    }
+    .tareas {
+      display: none;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 0 0 5px 5px;
+    }
+    .tarea {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .tarea:hover {
+      background-color: #e9ecef;
+    }
+    .tarea input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .tarea-completada {
+      text-decoration: line-through;
+      color: #6c757d;
+    }
+    .progreso-semana {
+      margin-top: 10px;
+      height: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .progreso-barra {
+      height: 100%;
+      background-color: #28a745;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-tasks"></i> Tareas por Semanas</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i> Volver a la página principal</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div id="tareas-container">
+      <!-- Las semanas y tareas se generarán dinámicamente aquí -->
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2024 Programación de Aplicaciones Móviles Web</p>
+  </footer>
+
+  <script>
+    const tareasData = [
+      {
+        semana: 1,
+        tareas: [
+          { id: 1, descripcion: "Introducción a la programación de aplicaciones móviles web", completada: false },
+          { id: 2, descripcion: "Instalación de entornos de desarrollo integrados (IDEs)", completada: false }
+        ]
+      },
+      {
+        semana: 2,
+        tareas: [
+          { id: 3, descripcion: "Creación de una aplicación móvil web básica utilizando HTML, CSS y JavaScript", completada: false },
+          { id: 4, descripcion: "Uso de frameworks para aplicaciones móviles web (React Native, Ionic, etc.)", completada: false }
+        ]
+      },
+      {
+        semana: 3,
+        tareas: [
+          { id: 5, descripcion: "Diseño de interfaces de usuario para aplicaciones móviles", completada: false },
+          { id: 6, descripcion: "Implementación de diseños responsivos", completada: false }
+        ]
+      }
+    ];
+
+    function generarTareas() {
+      const container = document.getElementById('tareas-container');
+      tareasData.forEach(semana => {
+        const semanaElement = document.createElement('div');
+        semanaElement.className = 'semana card';
+        semanaElement.innerHTML = `
+          <div class="semana-titulo">
+            <span>Semana ${semana.semana}</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="tareas">
+            ${semana.tareas.map(tarea => `
+              <div class="tarea">
+                <input type="checkbox" id="tarea-${tarea.id}" ${tarea.completada ? 'checked' : ''}>
+                <label for="tarea-${tarea.id}">${tarea.descripcion}</label>
+              </div>
+            `).join('')}
+            <div class="progreso-semana">
+              <div class="progreso-barra" style="width: 0%"></div>
+            </div>
+          </div>
+        `;
+        container.appendChild(semanaElement);
+      });
+
+      // Funcionalidad de acordeón
+      const titulos = document.querySelectorAll('.semana-titulo');
+      titulos.forEach(titulo => {
+        titulo.addEventListener('click', () => {
+          const tareas = titulo.nextElementSibling;
+          const icono = titulo.querySelector('i');
+          if (tareas.style.display === 'block') {
+            tareas.style.display = 'none';
+            icono.className = 'fas fa-chevron-down';
+          } else {
+            tareas.style.display = 'block';
+            icono.className = 'fas fa-chevron-up';
+          }
+        });
+      });
+
+      // Marcar tareas como completadas y actualizar progreso
+      const checkboxes = document.querySelectorAll('.tarea input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const label = e.target.nextElementSibling;
+          const semana = e.target.closest('.semana');
+          if (e.target.checked) {
+            label.classList.add('tarea-completada');
+          } else {
+            label.classList.remove('tarea-completada');
+          }
+          actualizarProgreso(semana);
+        });
+      });
+    }
+
+    function actualizarProgreso(semana) {
+      const totalTareas = semana.querySelectorAll('.tarea').length;
+      const tareasCompletadas = semana.querySelectorAll('.tarea input[type="checkbox"]:checked').length;
+      const porcentaje = (tareasCompletadas / totalTareas) * 100;
+      const barra = semana.querySelector('.progreso-barra');
+      barra.style.width = `${porcentaje}%`;
+    }
+
+    // Generar tareas al cargar la página
+    window.addEventListener('load', generarTareas);
+  </script>
+</body>
+</html>
