@@ -31,7 +31,7 @@
     }
     .tarea {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: 10px;
       padding: 10px;
       background-color: white;
@@ -43,8 +43,12 @@
     }
     .tarea input[type="checkbox"] {
       margin-right: 10px;
+      margin-top: 3px;
     }
-    .tarea-completada {
+    .tarea-contenido {
+      flex-grow: 1;
+    }
+    .tarea-completada .tarea-contenido {
       text-decoration: line-through;
       color: #6c757d;
     }
@@ -59,6 +63,12 @@
       height: 100%;
       background-color: #28a745;
       transition: width 0.3s ease;
+    }
+    .tarea-iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -85,22 +95,21 @@
       {
         semana: 1,
         tareas: [
-          { id: 1, descripcion:  '<a href="tareas/Las Aplicaciones.pdf" target="_blank">Descargar PDF</a>', completada: false },          
+          { id: 1, descripcion: 'Las Aplicaciones', archivo: 'tareas/Las Aplicaciones.pdf', tipo: 'pdf' },          
         ]
       },
       {
         semana: 2,
         tareas: [
-        { id: 2, descripcion:  '<a href="tareas/flutter.docx" target="_blank">Descargar PDF</a>', completada: false },
-          
+          { id: 2, descripcion: 'Flutter', archivo: 'tareas/flutter.docx', tipo: 'docx' },
         ]
       },
       {
         semana: 3,
         tareas: [
-        { id: 3, descripcion: 'Ejercicio1 - <a href="tareas/ejercicio1.dart" target="_blank">Ver ejercicio01.dart</a>', completada: false },
-          { id: 4, descripcion: 'Ejercicio2 - <a href="tareas/ejercicio2.dart" target="_blank">Ver ejercicio02.dart</a>', completada: false },
-          { id: 5, descripcion: 'Ejercicio3 - <a href="tareas/ejercicio3.dart" target="_blank">Ver ejercicio03.dart</a>', completada: false }
+          { id: 3, descripcion: 'Ejercicio 1', archivo: 'tareas/ejercicio1.dart', tipo: 'dart' },
+          { id: 4, descripcion: 'Ejercicio 2', archivo: 'tareas/ejercicio2.dart', tipo: 'dart' },
+          { id: 5, descripcion: 'Ejercicio 3', archivo: 'tareas/ejercicio3.dart', tipo: 'dart' }
         ]
       }
     ];
@@ -118,9 +127,13 @@
           <div class="tareas">
             ${semana.tareas.map(tarea => `
               <div class="tarea">
-                <input type="checkbox" id="tarea-${tarea.id}" ${tarea.completada ? 'checked' : ''}>
-                <label for="tarea-${tarea.id}">${tarea.descripcion}</label>
+                <input type="checkbox" id="tarea-${tarea.id}">
+                <div class="tarea-contenido">
+                  <label for="tarea-${tarea.id}">${tarea.descripcion}</label>
+                  <button onclick="mostrarContenido('${tarea.archivo}', '${tarea.tipo}')">Ver contenido</button>
+                </div>
               </div>
+              <div id="contenido-${tarea.id}" style="display:none;"></div>
             `).join('')}
             <div class="progreso-semana">
               <div class="progreso-barra" style="width: 0%"></div>
@@ -150,12 +163,12 @@
       const checkboxes = document.querySelectorAll('.tarea input[type="checkbox"]');
       checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
-          const label = e.target.nextElementSibling;
+          const tarea = e.target.closest('.tarea');
           const semana = e.target.closest('.semana');
           if (e.target.checked) {
-            label.classList.add('tarea-completada');
+            tarea.classList.add('tarea-completada');
           } else {
-            label.classList.remove('tarea-completada');
+            tarea.classList.remove('tarea-completada');
           }
           actualizarProgreso(semana);
         });
@@ -164,10 +177,30 @@
 
     function actualizarProgreso(semana) {
       const totalTareas = semana.querySelectorAll('.tarea').length;
-      const tareasCompletadas = semana.querySelectorAll('.tarea input[type="checkbox"]:checked').length;
+      const tareasCompletadas = semana.querySelectorAll('.tarea-completada').length;
       const porcentaje = (tareasCompletadas / totalTareas) * 100;
       const barra = semana.querySelector('.progreso-barra');
       barra.style.width = `${porcentaje}%`;
+    }
+
+    function mostrarContenido(archivo, tipo) {
+      const baseUrl = 'https://github.com/Zerox30-dev/AplicacionesMoviles.github.io/blob/main/';
+      const url = baseUrl + archivo;
+      
+      if (tipo === 'pdf') {
+        window.open(url, '_blank');
+      } else if (tipo === 'docx') {
+        window.open(url, '_blank');
+      } else if (tipo === 'dart') {
+        fetch(url)
+          .then(response => response.text())
+          .then(data => {
+            const contenidoDiv = document.getElementById(`contenido-${archivo.split('/').pop().split('.')[0]}`);
+            contenidoDiv.innerHTML = `<pre><code>${data}</code></pre>`;
+            contenidoDiv.style.display = 'block';
+          })
+          .catch(error => console.error('Error:', error));
+      }
     }
 
     // Generar tareas al cargar la página
