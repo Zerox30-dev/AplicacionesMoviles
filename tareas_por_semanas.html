@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tareas por Semanas - Programación de Aplicaciones Móviles Web</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #2c3e50;
+      --background-color: #1a1a1a;
+      --text-color: #f0f0f0;
+      --card-background: #2d2d2d;
+      --header-background: #121212;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--header-background);
+      color: white;
+      padding: 2em 1em;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    nav {
+      position: relative;
+      z-index: 1;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 1em 0 0;
+    }
+
+    nav li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease, transform 0.3s ease;
+      display: inline-block;
+    }
+
+    nav a:hover {
+      color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2em auto;
+      padding: 0 20px;
+    }
+
+    .semana {
+      margin-bottom: 20px;
+      background-color: var(--card-background);
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .semana-titulo {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .semana-titulo:hover {
+      background-color: #3a7bc8;
+    }
+
+    .tareas {
+      display: none;
+      padding: 15px;
+    }
+
+    .tarea {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 15px;
+      padding: 15px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .tarea:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .tarea input[type="checkbox"] {
+      margin-right: 15px;
+      margin-top: 3px;
+    }
+
+    .tarea-contenido {
+      flex-grow: 1;
+    }
+
+    .tarea-completada .tarea-contenido {
+      text-decoration: line-through;
+      color: #888;
+    }
+
+    .progreso-semana {
+      margin-top: 15px;
+      height: 10px;
+      background-color: #444;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progreso-barra {
+      height: 100%;
+      background-color: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    .tarea-contenido-visible {
+      background-color: #333;
+      border: 1px solid #555;
+      border-radius: 5px;
+      padding: 15px;
+      margin-top: 15px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      max-height: 300px;
+      overflow-y: auto;
+      color: #ddd;
+    }
+
+    .btn-ver-contenido, .btn-descargar, .btn-ver-github {
+      margin-right: 10px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-ver-contenido {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-descargar {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-ver-github {
+      background-color: #333;
+      color: white;
+    }
+
+    .btn-ver-contenido:hover, .btn-descargar:hover, .btn-ver-github:hover {
+      transform: translateY(-2px);
+      filter: brightness(110%);
+    }
+
+    footer {
+      background-color: var(--secondary-color);
+      color: white;
+      text-align: center;
+      padding: 1em;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .btn-ver-contenido, .btn-descargar, .btn-ver-github {
+        margin-top: 10px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-tasks"></i> Tareas por Semanas</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i> Volver a la página principal</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div id="tareas-container">
+      <!-- Las semanas y tareas se generarán dinámicamente aquí -->
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2024 Programación de Aplicaciones Móviles Web</p>
+  </footer>
+
+  <script>
+    const tareasData = [
+      {
+        semana: 1,
+        tareas: [
+          { id: 1, descripcion: 'Las Aplicaciones', archivo: 'tareas/Las Aplicaciones.pdf', tipo: 'pdf' },          
+        ]
+      },
+      {
+        semana: 2,
+        tareas: [
+          { id: 2, descripcion: 'Flutter', archivo: 'tareas/flutter.docx', tipo: 'docx' },
+        ]
+      },
+      {
+        semana: 3,
+        tareas: [
+          { id: 3, descripcion: 'Ejercicio 1', archivo: 'tareas/ejercicio01.dart', tipo: 'dart' },
+          { id: 4, descripcion: 'Ejercicio 2', archivo: 'tareas/ejercicio02.dart', tipo: 'dart' },
+          { id: 5, descripcion: 'Ejercicio 3', archivo: 'tareas/ejercicio03.dart', tipo: 'dart' }
+        ]
+      }
+    ];
+
+    function generarTareas() {
+      const container = document.getElementById('tareas-container');
+      tareasData.forEach(semana => {
+        const semanaElement = document.createElement('div');
+        semanaElement.className = 'semana card';
+        semanaElement.innerHTML = `
+          <div class="semana-titulo">
+            <span>Semana ${semana.semana}</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="tareas">
+            ${semana.tareas.map(tarea => `
+              <div class="tarea">
+                <input type="checkbox" id="tarea-${tarea.id}">
+                <div class="tarea-contenido">
+                  <label for="tarea-${tarea.id}">${tarea.descripcion}</label>
+                  <button class="btn-ver-contenido" onclick="mostrarContenido('${tarea.archivo}', '${tarea.tipo}', ${tarea.id})">Ver contenido</button>
+                  <button class="btn-descargar" onclick="descargarArchivo('${tarea.archivo}')">Descargar</button>
+                  <button class="btn-ver-github" onclick="verEnGitHub('${tarea.archivo}')">Ver en GitHub</button>
+                </div>
+              </div>
+              <div id="contenido-${tarea.id}" style="display:none;"></div>
+            `).join('')}
+            <div class="progreso-semana">
+              <div class="progreso-barra" style="width: 0%"></div>
+            </div>
+          </div>
+        `;
+        container.appendChild(semanaElement);
+      });
+
+      // Funcionalidad de acordeón
+      const titulos = document.querySelectorAll('.semana-titulo');
+      titulos.forEach(titulo => {
+        titulo.addEventListener('click', () => {
+          const tareas = titulo.nextElementSibling;
+          const icono = titulo.querySelector('i');
+          if (tareas.style.display === 'block') {
+            tareas.style.display = 'none';
+            icono.className = 'fas fa-chevron-down';
+          } else {
+            tareas.style.display = 'block';
+            icono.className = 'fas fa-chevron-up';
+          }
+        });
+      });
+
+      // Marcar tareas como completadas y actualizar progreso
+      const checkboxes = document.querySelectorAll('.tarea input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const tarea = e.target.closest('.tarea');
+          const semana = e.target.closest('.semana');
+          if (e.target.checked) {
+            tarea.classList.add('tarea-completada');
+          } else {
+            tarea.classList.remove('tarea-completada');
+          }
+          actualizarProgreso(semana);
+        });
+      });
+    }
+
+    function actualizarProgreso(semana) {
+      const totalTareas = semana.querySelectorAll('.tarea').length;
+      const tareasCompletadas = semana.querySelectorAll('.tarea-completada').length;
+      const porcentaje = (tareasCompletadas / totalTareas) * 100;
+      const barra = semana.querySelector('.progreso-barra');
+      barra.style.width = `${porcentaje}%`;
+    }
+
+    function mostrarContenido(archivo, tipo, id) {
+      const baseUrl = 'https://raw.githubusercontent.com/Zerox30-dev/AplicacionesMoviles.github.io/main/';
+      const url = baseUrl + archivo;
+      const contenidoDiv = document.getElementById(`contenido-${id}`);
+      
+      if (tipo === 'pdf') {
+        window.open(url, '_blank');
+      } else if (tipo === 'docx') {
+        alert('Los archivos DOCX no se pueden visualizar directamente en el navegador. Por favor, descarga el archivo para verlo.');
+      } else if (tipo === 'dart') {
+        fetch(url)
+          .then(response => response.text())
+          .then(data => {
+            contenidoDiv.innerHTML = `<pre class="tarea-contenido-visible"><code>${data}</code></pre>`;
+            contenidoDiv.style.display = contenidoDiv.style.display === 'none' ? 'block' : 'none';
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            contenidoDiv.innerHTML = '<p>Error al cargar el contenido. Por favor, intenta descargarlo.</p>';
+            contenidoDiv.style.display = 'block';
+          });
+      }
+    }
+
+    function descargarArchivo(archivo) {
+      const baseUrl = 'https://github.com/Zerox30-dev/AplicacionesMoviles.github.io/raw/main/';
+      const url = baseUrl + archivo;
+      window.open(url, '_blank');
+    }
+
+    function verEnGitHub(archivo) {
+      const baseUrl = 'https://github.com/Zerox30-dev/AplicacionesMoviles.github.io/blob/main/';
+      const url = baseUrl + archivo;
+      window.open(url, '_blank');
+    }
+
+    // Generar tareas al cargar la página
+    window.addEventListener('load', generarTareas);
+  </script>
+</body>
+</html>
