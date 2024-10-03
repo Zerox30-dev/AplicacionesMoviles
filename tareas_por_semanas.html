@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tareas por Semanas - Programación de Aplicaciones Móviles Web</title>  
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
@@ -15,6 +14,11 @@
       --text-color: #f0f0f0;
       --card-background: #2d2d2d;
       --header-background: #121212;
+      --accent-color: #6c5ce7;
+      --success-color: #00b894;
+      --warning-color: #fdcb6e;
+      --table-header-bg: #34495e;
+      --table-row-hover: #3d3d3d;
     }
 
     body {
@@ -56,9 +60,11 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
-    header h2{
-  color: #f7f0f0;
-}
+    header h2 {
+      color: #f7f0f0;
+      position: relative;
+      z-index: 1;
+    }
 
     nav {
       position: relative;
@@ -124,10 +130,8 @@
     }
 
     .tarea {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 15px;
-      padding: 15px;
+      margin-bottom: 20px;
+      padding: 20px;
       background-color: rgba(255, 255, 255, 0.05);
       border-radius: 5px;
       transition: background-color 0.3s ease;
@@ -137,75 +141,136 @@
       background-color: rgba(255, 255, 255, 0.1);
     }
 
-    .tarea input[type="checkbox"] {
-      margin-right: 15px;
-      margin-top: 3px;
+    .tarea-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .tarea-titulo {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: var(--primary-color);
     }
 
     .tarea-contenido {
-      flex-grow: 1;
+      margin-bottom: 15px;
     }
 
-    .tarea-completada .tarea-contenido {
-      text-decoration: line-through;
-      color: #888;
-    }
-
-    .progreso-semana {
-      margin-top: 15px;
-      height: 10px;
-      background-color: #444;
+    .formula {
+      background-color: rgba(106, 90, 205, 0.1);
+      padding: 10px;
       border-radius: 5px;
-      overflow: hidden;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
     }
 
-    .progreso-barra {
-      height: 100%;
-      background-color: var(--primary-color);
-      transition: width 0.3s ease;
+    .tabla-container {
+      overflow-x: auto;
+      margin: 15px 0;
     }
 
-    .tarea-contenido-visible {
-      background-color: #333;
-      border: 1px solid #555;
-      border-radius: 5px;
-      padding: 15px;
-      margin-top: 15px;
-      white-space: pre-wrap;
-      font-family: monospace;
-      max-height: 300px;
-      overflow-y: auto;
-      color: #ddd;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
     }
 
-    .btn-ver-contenido, .btn-descargar, .btn-ver-github {
-      margin-right: 10px;
+    th, td {
+      border: 1px solid var(--secondary-color);
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--table-header-bg);
+      color: white;
+    }
+
+    tr:hover {
+      background-color: var(--table-row-hover);
+    }
+
+    .botones {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
       padding: 8px 15px;
       border: none;
-      border-radius: 3px;
+      border-radius: 4px;
       cursor: pointer;
       font-size: 0.9em;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+      transition: all 0.3s ease;
     }
 
-    .btn-ver-contenido {
-      background-color: #007bff;
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-ver {
+      background-color: var(--accent-color);
       color: white;
     }
 
     .btn-descargar {
-      background-color: #28a745;
+      background-color: var(--success-color);
       color: white;
     }
 
-    .btn-ver-github {
+    .btn-github {
       background-color: #333;
       color: white;
     }
 
-    .btn-ver-contenido:hover, .btn-descargar:hover, .btn-ver-github:hover {
+    .btn:hover {
       transform: translateY(-2px);
-      filter: brightness(110%);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .lista-distribucion {
+      list-style: none;
+      padding: 0;
+    }
+
+    .lista-distribucion li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lista-distribucion li:last-child {
+      border-bottom: none;
+    }
+
+    .grid-gastos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .gasto-item {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .botones {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
     }
 
     footer {
@@ -216,13 +281,6 @@
       position: relative;
       bottom: 0;
       width: 100%;
-    }
-
-    @media (max-width: 768px) {
-      .btn-ver-contenido, .btn-descargar, .btn-ver-github {
-        margin-top: 10px;
-        width: 100%;
-      }
     }
   </style>
 </head>
@@ -255,7 +313,7 @@
             descripcion: 'Las Aplicaciones', 
             archivo: 'tareas/Las Aplicaciones.pdf', 
             tipo: 'pdf',
-            enunciado: 'Realiza una infografía sobre un tema realizado en la semana 01 – Fundamentos de Apps Móviles. Ten en cuenta que los textos a mostrar en cada diapositiva deben ser cortos y puntualesInvestigar y presentar un informe sobre los diferentes tipos de aplicaciones móviles: nativas, híbridas y web. Incluir ventajas y desventajas de cada tipo.'
+            enunciado: 'Realiza una infografía sobre un tema realizado en la semana 01 – Fundamentos de Apps Móviles. Ten en cuenta que los textos a mostrar en cada diapositiva deben ser cortos y puntuales. Investigar y presentar un informe sobre los diferentes tipos de aplicaciones móviles: nativas, híbridas y web. Incluir ventajas y desventajas de cada tipo.'
           },          
         ]
       },
@@ -267,7 +325,7 @@
             descripcion: 'Flutter', 
             archivo: 'tareas/flutter.docx', 
             tipo: 'docx',
-            enunciado: 'Elabora un manual de instalación del lenguaje Dart.  Para el editor de código Visual Studio Code.'
+            enunciado: 'Elabora un manual de instalación del lenguaje Dart. Para el editor de código Visual Studio Code.'
           },
         ]
       },
@@ -279,25 +337,43 @@
             descripcion: 'Ejercicio 1', 
             archivo: 'tareas/ejercicio01.dart', 
             tipo: 'dart',
-            enunciado: 'Diseñe un programa en Lenguaje Dart que determine el área total (A) y el volumen (V) de un cilindro del que se conoce su radio (r) y su altura (h). Considere las siguientes fórmulas: A = 2πr(r+h) y V = π r²h'
+            enunciado: 'Diseñe un programa en Lenguaje Dart que determine el área total (A) y el volumen (V) de un cilindro del que se conoce su radio (r) y su altura (h).',
+            formulas: [
+              { label: 'Área Total:', formula: 'A = 2πr(r+h)' },
+              { label: 'Volumen:', formula: 'V = π r²h' }
+            ]
           },
           { 
             id: 4, 
             descripcion: 'Ejercicio 2', 
             archivo: 'tareas/ejercicio02.dart', 
             tipo: 'dart',
-            enunciado: 'Un padre repartirá una cantidad de dinero entre sus cinco hijos. Cada uno recibirá una cantidad equivalente a: • Tamar: 85% del monto recibido por Josué • Josué: 27% de la cantidad a repartir • Caleb: 23% del monto total recibido entre Josué y Daniel • Daniel: 25% de la cantidad a repartir • David: lo que queda del dinero a repartir. Dada la cantidad de dinero a repartir, diseñe un programa en lenguaje Dart que determine cuánto de dinero recibirá cada hijo.'
+            enunciado: 'Un padre repartirá una cantidad de dinero entre sus cinco hijos.',
+            distribucion: [
+              { nombre: 'Tamar', porcentaje: '85% del monto recibido por Josué' },
+              { nombre: 'Josué', porcentaje: '27% de la cantidad a repartir' },
+              { nombre: 'Caleb', porcentaje: '23% del monto total recibido entre Josué y Daniel' },
+              { nombre: 'Daniel', porcentaje: '25% de la cantidad a repartir' },
+              { nombre: 'David', porcentaje: 'Lo que queda del dinero a repartir' }
+            ]
           },
           { 
             id: 5, 
             descripcion: 'Ejercicio 3', 
             archivo: 'tareas/ejercicio03.dart', 
             tipo: 'dart',
-            enunciado: 'La empresa "Juanito Import" SAC expondrá sus productos en una feria. La empresa considera que el monto total de dinero a invertir estará distribuido de la siguiente manera: Alquiler de espacio en la feria (23%), Publicidad (7%), Transporte (26%), Servicios feriales (12%), Decoración (21%), Gastos varios (11%). Dado el monto total de dinero a invertir, implemente un programa que determine cuánto gastará la empresa en cada rubro.'
+            enunciado: 'La empresa "Juanito Import" SAC expondrá sus productos en una feria.',
+            gastos: [
+              { categoria: 'Alquiler de espacio', porcentaje: '23%' },
+              { categoria: 'Publicidad', porcentaje: '7%' },
+              { categoria: 'Transporte', porcentaje: '26%' },
+              { categoria: 'Servicios feriales', porcentaje: '12%' },
+              { categoria: 'Decoración', porcentaje: '21%' },
+              { categoria: 'Gastos varios', porcentaje: '11%' }
+            ]
           }
         ]
       },
-
       {
         semana: 4,
         tareas: [
@@ -306,52 +382,29 @@
             descripcion: 'Ejercicio 1', 
             archivo: 'tareas/semana04/ejercicio01.dart', 
             tipo: 'dart',
-            enunciado: `En una universidad, los alumnos están categorizados en cuatro categorías. A cada categoría le corresponde una pensión mensual distinta dada en la siguiente tabla:
-
-Categoría  |  Pensión
-A          |  S/. 550
-B          |  S/. 500
-C          |  S/. 460
-D          |  S/. 400
-
-Semestralmente, la universidad efectúa rebajas en las pensiones de sus estudiantes a partir del segundo ciclo en base al promedio ponderado del ciclo anterior en porcentajes dados en la tabla siguiente:
-
-Nota Promedio  |  Promedio Descuento
-0 a 13.99      |  No hay descuento
-14.00 a 15.99  |  10%
-16.00 a 17.99  |  12%
-18.00 a 20.00  |  15%
-
-Implemente una aplicación utilizando lenguaje Dart que determine cuánto de rebaja recibirá un estudiante sobre su pensión actual y a cuánto asciende su nueva pensión.`
-          },
-          { 
-            id: 7, 
-            descripcion: 'Ejercicio 2', 
-            archivo: 'tareas/semana04/ejercicio02.dart', 
-            tipo: 'dart',
-            enunciado: `El ejército nacional ha decidido hacer una jornada de ventas de libretas militares para muchos hombres que no han definido su situación militar u otros que no son aptos para prestar el servicio.
-
-Para todos los hombres mayores de 18 años la libreta tendrá un costo de S/. 350, pero para aquellos que tengan nivel 1 se les hará un descuento del 40%; para los de nivel 2, el descuento será del 30%; para nivel 3 del 15%; y para los demás estratos o niveles no habrá descuento.
-
-Para los jóvenes con los 18 años la libreta tiene un costo de S/. 200 y los jóvenes con nivel del sistema de beneficio 1, tendrán un descuento del 60%; para los de nivel 2, descuento del 40%; para los del 3, un descuento del 20% y para los demás estratos no habrá descuento.
-
-Realizar una aplicación que tome la edad y el nivel del sistema de beneficio de un hombre y nos muestre descuento que le hacen y su valor final a pagar.`
-          },
-          { 
-            id: 8, 
-            descripcion: 'Ejercicio 3', 
-            archivo: 'tareas/semana04/ejercicio03.dart', 
-            tipo: 'dart',
-            enunciado: `Los cálculos salariales de los vendedores de una empresa se calculan de la siguiente manera:
-
-· Sueldo básico: S/.600
-· Comisión: 7% del importe total vendido si es que el importe total vendido es mayor a S/.15000; en caso contrario, 5% del importe total vendido
-· Bonificación: S/.25 por cada hijo si es que el número de hijos es menor a 5; en caso contrario, S/.22 por cada hijo
-· Sueldo bruto: La suma del sueldo básico, más la comisión y más la bonificación
-· Descuento: 15% del sueldo bruto si es que el sueldo bruto es mayor que S/.3500; en caso contrario, 11% del sueldo bruto
-· Sueldo neto: La resta del sueldo bruto menos el descuento
-
-Dado el importe total vendido y el número de hijos de un vendedor, diseñe un programa que determine el sueldo básico, la comisión, la bonificación, el sueldo bruto, el descuento y el sueldo neto.`
+            enunciado: 'Cálculo de pensiones y descuentos universitarios',
+            tablas: [
+              {
+                titulo: 'Categorías y Pensiones',
+                columnas: ['Categoría', 'Pensión'],
+                datos: [
+                  ['A', 'S/. 550'],
+                  ['B', 'S/. 500'],
+                  ['C', 'S/. 460'],
+                  ['D', 'S/. 400']
+                ]
+              },
+              {
+                titulo: 'Descuentos por Promedio',
+                columnas: ['Nota Promedio', 'Descuento'],
+                datos: [
+                  ['0 a 13.99', 'No hay descuento'],
+                  ['14.00 a 15.99', '10%'],
+                  ['16.00 a 17.99', '12%'],
+                  ['18.00 a 20.00', '15%']
+                ]
+              }
+            ]
           }
         ]
       }
