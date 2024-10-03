@@ -46,6 +46,10 @@ header h1 {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
+header h2{
+  color: #f7f0f0;
+}
+
 nav {
   position: relative;
   z-index: 1;
