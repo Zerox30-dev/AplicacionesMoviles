@@ -6,6 +6,13 @@
   <title>Tareas por Semanas - Programación de Aplicaciones Móviles Web</title>  
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <!-- Agregamos Babel para JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
   
   <style>
     :root {
@@ -224,6 +231,54 @@
         width: 100%;
       }
     }
+
+
+    .enunciado {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 15px;
+    margin: 10px 0;
+    white-space: pre-wrap;
+  }
+
+  /* Estilos para los botones */
+  .botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .botones button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .botones button i {
+    font-size: 16px;
+  }
+
+  /* Mejoras visuales para el contenido de la tarea */
+  .tarea-contenido h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: var(--primary-color);
+  }
+
+  /* Animaciones */
+  .tareas {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .semana-titulo:hover {
+    background-color: rgba(74, 144, 226, 0.7);
+  }
   </style>
 </head>
 <body>
@@ -245,7 +300,9 @@
     <p>&copy; 2024 Programación de Aplicaciones Móviles Web</p>
   </footer>
 
-  <script>
+
+
+  <script type="text/babel">
     const tareasData = [
       {
         semana: 1,
@@ -357,117 +414,122 @@ Dado el importe total vendido y el número de hijos de un vendedor, diseñe un p
       }
     ];
 
-    function generarTareas() {
-      const container = document.getElementById('tareas-container');
-      tareasData.forEach(semana => {
-        const semanaElement = document.createElement('div');
-        semanaElement.className = 'semana card';
-        semanaElement.innerHTML = `
-          <div class="semana-titulo">
-            <span>Semana ${semana.semana}</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="tareas">
-            ${semana.tareas.map(tarea => `
-              <div class="tarea">
-                <input type="checkbox" id="tarea-${tarea.id}">
-                <div class="tarea-contenido">
-                  <label for="tarea-${tarea.id}">${tarea.descripcion}</label>
-                  <p>${tarea.enunciado}</p>
-                  <button class="btn-ver-contenido" onclick="mostrarContenido('${tarea.archivo}', '${tarea.tipo}', ${tarea.id})">Ver contenido</button>
-                  <button class="btn-descargar" onclick="descargarArchivo('${tarea.archivo}')">Descargar</button>
-                  <button class="btn-ver-github" onclick="verEnGitHub('${tarea.archivo}')">Ver en GitHub</button>
-                </div>
-              </div>
-              <div id="contenido-${tarea.id}" style="display:none;"></div>
-            `).join('')}
-            <div class="progreso-semana">
-              <div class="progreso-barra" style="width: 0%"></div>
-            </div>
-          </div>
-        `;
-        container.appendChild(semanaElement);
-      });
 
 
-      // Funcionalidad de acordeón
-      const titulos = document.querySelectorAll('.semana-titulo');
-      titulos.forEach(titulo => {
-        titulo.addEventListener('click', () => {
-          const tareas = titulo.nextElementSibling;
-          const icono = titulo.querySelector('i');
-          if (tareas.style.display === 'block') {
-            tareas.style.display = 'none';
-            icono.className = 'fas fa-chevron-down';
-          } else {
-            tareas.style.display = 'block';
-            icono.className = 'fas fa-chevron-up';
-          }
-        });
-      });
 
-      // Marcar tareas como completadas y actualizar progreso
-      const checkboxes = document.querySelectorAll('.tarea input[type="checkbox"]');
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', (e) => {
-          const tarea = e.target.closest('.tarea');
-          const semana = e.target.closest('.semana');
-          if (e.target.checked) {
-            tarea.classList.add('tarea-completada');
-          } else {
-            tarea.classList.remove('tarea-completada');
-          }
-          actualizarProgreso(semana);
-        });
-      });
+    function Tarea({ tarea, onCheckboxChange }) {
+  const [mostrarContenido, setMostrarContenido] = React.useState(false);
+
+  function handleMostrarContenido() {
+    if (tarea.tipo === 'pdf') {
+      window.open(`https://raw.githubusercontent.com/Zerox30-dev/AplicacionesMoviles.github.io/main/${tarea.archivo}`, '_blank');
+    } else {
+      setMostrarContenido(!mostrarContenido);
     }
+  }
 
-    function actualizarProgreso(semana) {
-      const totalTareas = semana.querySelectorAll('.tarea').length;
-      const tareasCompletadas = semana.querySelectorAll('.tarea-completada').length;
-      const porcentaje = (tareasCompletadas / totalTareas) * 100;
-      const barra = semana.querySelector('.progreso-barra');
-      barra.style.width = `${porcentaje}%`;
-    }
+  function handleDescargar() {
+    const baseUrl = 'https://github.com/Zerox30-dev/AplicacionesMoviles.github.io/raw/main/';
+    window.open(baseUrl + tarea.archivo, '_blank');
+  }
 
-    function mostrarContenido(archivo, tipo, id) {
-      const baseUrl = 'https://raw.githubusercontent.com/Zerox30-dev/AplicacionesMoviles.github.io/main/';
-      const url = baseUrl + archivo;
-      const contenidoDiv = document.getElementById(`contenido-${id}`);
-      
-      if (tipo === 'pdf') {
-        window.open(url, '_blank');
-      } else if (tipo === 'docx') {
-        alert('Los archivos DOCX no se pueden visualizar directamente en el navegador. Por favor, descarga el archivo para verlo.');
-      } else if (tipo === 'dart') {
-        fetch(url)
-          .then(response => response.text())
-          .then(data => {
-            contenidoDiv.innerHTML = `<pre class="tarea-contenido-visible"><code>${data}</code></pre>`;
-            contenidoDiv.style.display = contenidoDiv.style.display === 'none' ? 'block' : 'none';
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            contenidoDiv.innerHTML = '<p>Error al cargar el contenido. Por favor, intenta descargarlo.</p>';
-            contenidoDiv.style.display = 'block';
-          });
+  function handleVerGitHub() {
+    const baseUrl = 'https://github.com/Zerox30-dev/AplicacionesMoviles.github.io/blob/main/';
+    window.open(baseUrl + tarea.archivo, '_blank');
+  }
+
+  return (
+    <div className="tarea">
+      <input 
+        type="checkbox" 
+        onChange={(e) => onCheckboxChange(e.target.checked)}
+      />
+      <div className="tarea-contenido">
+        <h3>{tarea.descripcion}</h3>
+        <div className="enunciado">
+          {tarea.enunciado.split('\n').map((linea, index) => (
+            <p key={index}>{linea}</p>
+          ))}
+        </div>
+        <div className="botones">
+          <button className="btn-ver-contenido" onClick={handleMostrarContenido}>
+            <i className="fas fa-eye"></i> Ver contenido
+          </button>
+          <button className="btn-descargar" onClick={handleDescargar}>
+            <i className="fas fa-download"></i> Descargar
+          </button>
+          <button className="btn-ver-github" onClick={handleVerGitHub}>
+            <i className="fab fa-github"></i> Ver en GitHub
+          </button>
+        </div>
+        {mostrarContenido && tarea.tipo === 'dart' && (
+          <div className="tarea-contenido-visible">
+            <pre><code>{'https://raw.githubusercontent.com/Zerox30-dev/AplicacionesMoviles.github.io/main/'}</code></pre>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Componente para cada semana
+function Semana({ datos }) {
+  const [expandida, setExpandida] = React.useState(false);
+  const [tareasCompletadas, setTareasCompletadas] = React.useState(new Set());
+
+  function handleCheckboxChange(tareaId, completada) {
+    setTareasCompletadas(prev => {
+      const nuevo = new Set(prev);
+      if (completada) {
+        nuevo.add(tareaId);
+      } else {
+        nuevo.delete(tareaId);
       }
-    }
+      return nuevo;
+    });
+  }
 
-    function descargarArchivo(archivo) {
-      const baseUrl = 'https://github.com/Zerox30-dev/AplicacionesMoviles.github.io/raw/main/';
-      const url = baseUrl + archivo;
-      window.open(url, '_blank');
-    }
+  const progreso = (tareasCompletadas.size / datos.tareas.length) * 100;
 
-    function verEnGitHub(archivo) {
-      const baseUrl = 'https://github.com/Zerox30-dev/AplicacionesMoviles.github.io/blob/main/';
-      const url = baseUrl + archivo;
-      window.open(url, '_blank');
-    }
+  return (
+    <div className="semana">
+      <div className="semana-titulo" onClick={() => setExpandida(!expandida)}>
+        <span>Semana {datos.semana}</span>
+        <i className={`fas fa-chevron-${expandida ? 'up' : 'down'}`}></i>
+      </div>
+      {expandida && (
+        <div className="tareas">
+          {datos.tareas.map(tarea => (
+            <Tarea 
+              key={tarea.id}
+              tarea={tarea}
+              onCheckboxChange={(completada) => handleCheckboxChange(tarea.id, completada)}
+            />
+          ))}
+          <div className="progreso-semana">
+            <div className="progreso-barra" style={{width: `${progreso}%`}}></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
-    // Generar tareas al cargar la página
-    window.addEventListener('load', generarTareas);
+// Componente principal
+function App() {
+  return (
+    <div id="tareas-container">
+      {tareasData.map(semana => (
+        <Semana key={semana.semana} datos={semana} />
+      ))}
+    </div>
+  );
+}
+
+// Renderizamos la aplicación
+ReactDOM.render(<App />, document.getElementById('root'));
+
+ 
   </script>
 </body>
 </html>
