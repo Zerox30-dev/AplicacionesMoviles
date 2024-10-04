@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tareas por Semanas - Programación de Aplicaciones Móviles Web</title>  
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
@@ -15,8 +14,12 @@
       --text-color: #f0f0f0;
       --card-background: #2d2d2d;
       --header-background: #121212;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
     }
 
+    /* Estilos base mejorados */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
@@ -26,6 +29,20 @@
       line-height: 1.6;
     }
 
+    /* Mejoras de accesibilidad */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Estilos de encabezado mejorados */
     header {
       background-color: var(--header-background);
       color: white;
@@ -48,181 +65,103 @@
       z-index: 0;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      position: relative;
-      z-index: 1;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    /* Mejoras de diseño responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn-group button {
+        width: 100%;
+        margin: 5px 0;
+      }
     }
 
-    header h2{
-  color: #f7f0f0;
-}
-
-    nav {
-      position: relative;
-      z-index: 1;
-    }
-
-    nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 1em 0 0;
-    }
-
-    nav li {
-      display: inline-block;
-      margin-right: 20px;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s ease, transform 0.3s ease;
-      display: inline-block;
-    }
-
-    nav a:hover {
-      color: var(--primary-color);
-      transform: translateY(-2px);
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 2em auto;
-      padding: 0 20px;
-    }
-
+    /* Mejoras en las tarjetas de tareas */
     .semana {
       margin-bottom: 20px;
       background-color: var(--card-background);
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
       overflow: hidden;
+      transition: transform 0.3s ease;
     }
 
-    .semana-titulo {
+    .semana:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Estilos de botones mejorados */
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn i {
+      margin-right: 5px;
+    }
+
+    .btn-primary {
       background-color: var(--primary-color);
       color: white;
-      padding: 15px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background-color 0.3s ease;
     }
 
-    .semana-titulo:hover {
-      background-color: #3a7bc8;
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
     }
 
-    .tareas {
-      display: none;
-      padding: 15px;
+    .btn-github {
+      background-color: #333;
+      color: white;
     }
 
-    .tarea {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 15px;
-      padding: 15px;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+    .btn:hover {
+      filter: brightness(110%);
+      transform: translateY(-2px);
     }
 
-    .tarea:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .tarea input[type="checkbox"] {
-      margin-right: 15px;
-      margin-top: 3px;
-    }
-
-    .tarea-contenido {
-      flex-grow: 1;
-    }
-
-    .tarea-completada .tarea-contenido {
-      text-decoration: line-through;
-      color: #888;
-    }
-
+    /* Mejoras en la barra de progreso */
     .progreso-semana {
       margin-top: 15px;
       height: 10px;
       background-color: #444;
       border-radius: 5px;
       overflow: hidden;
+      position: relative;
     }
 
     .progreso-barra {
       height: 100%;
-      background-color: var(--primary-color);
-      transition: width 0.3s ease;
+      background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+      transition: width 0.5s ease;
     }
 
-    .tarea-contenido-visible {
-      background-color: #333;
-      border: 1px solid #555;
-      border-radius: 5px;
-      padding: 15px;
-      margin-top: 15px;
-      white-space: pre-wrap;
-      font-family: monospace;
-      max-height: 300px;
-      overflow-y: auto;
-      color: #ddd;
+    /* Animaciones y transiciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .btn-ver-contenido, .btn-descargar, .btn-ver-github {
-      margin-right: 10px;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 0.9em;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .btn-ver-contenido {
-      background-color: #007bff;
-      color: white;
-    }
-
-    .btn-descargar {
-      background-color: #28a745;
-      color: white;
-    }
-
-    .btn-ver-github {
-      background-color: #333;
-      color: white;
-    }
-
-    .btn-ver-contenido:hover, .btn-descargar:hover, .btn-ver-github:hover {
-      transform: translateY(-2px);
-      filter: brightness(110%);
-    }
-
-    footer {
-      background-color: var(--secondary-color);
-      color: white;
-      text-align: center;
-      padding: 1em;
-      position: relative;
-      bottom: 0;
-      width: 100%;
-    }
-
-    @media (max-width: 768px) {
-      .btn-ver-contenido, .btn-descargar, .btn-ver-github {
-        margin-top: 10px;
-        width: 100%;
-      }
+    .tarea {
+      animation: fadeIn 0.5s ease;
     }
   </style>
 </head>
@@ -359,98 +298,154 @@ Dado el importe total vendido y el número de hijos de un vendedor, diseñe un p
 
     function generarTareas() {
       const container = document.getElementById('tareas-container');
+      
       tareasData.forEach(semana => {
         const semanaElement = document.createElement('div');
-        semanaElement.className = 'semana card';
+        semanaElement.className = 'semana';
+        
+        const tareasCompletadas = localStorage.getItem(`semana-${semana.semana}-completadas`);
+        const tareasCompletadasArray = tareasCompletadas ? JSON.parse(tareasCompletadas) : [];
+        
         semanaElement.innerHTML = `
-          <div class="semana-titulo">
+          <div class="semana-titulo" role="button" aria-expanded="false" tabindex="0">
             <span>Semana ${semana.semana}</span>
-            <i class="fas fa-chevron-down"></i>
+            <i class="fas fa-chevron-down" aria-hidden="true"></i>
           </div>
-          <div class="tareas">
+          <div class="tareas" hidden>
             ${semana.tareas.map(tarea => `
-              <div class="tarea">
-                <input type="checkbox" id="tarea-${tarea.id}">
+              <div class="tarea ${tareasCompletadasArray.includes(tarea.id) ? 'tarea-completada' : ''}">
+                <input type="checkbox" id="tarea-${tarea.id}" 
+                  ${tareasCompletadasArray.includes(tarea.id) ? 'checked' : ''}>
                 <div class="tarea-contenido">
                   <label for="tarea-${tarea.id}">${tarea.descripcion}</label>
                   <p>${tarea.enunciado}</p>
-                  <button class="btn-ver-contenido" onclick="mostrarContenido('${tarea.archivo}', '${tarea.tipo}', ${tarea.id})">Ver contenido</button>
-                  <button class="btn-descargar" onclick="descargarArchivo('${tarea.archivo}')">Descargar</button>
-                  <button class="btn-ver-github" onclick="verEnGitHub('${tarea.archivo}')">Ver en GitHub</button>
+                  <div class="btn-group">
+                    <button class="btn btn-primary" onclick="mostrarContenido('${tarea.archivo}', '${tarea.tipo}', ${tarea.id})">
+                      <i class="fas fa-eye"></i> Ver contenido
+                    </button>
+                    <button class="btn btn-success" onclick="descargarArchivo('${tarea.archivo}')">
+                      <i class="fas fa-download"></i> Descargar
+                    </button>
+                    <button class="btn btn-github" onclick="verEnGitHub('${tarea.archivo}')">
+                      <i class="fab fa-github"></i> Ver en GitHub
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div id="contenido-${tarea.id}" style="display:none;"></div>
+              <div id="contenido-${tarea.id}" class="contenido-tarea" hidden></div>
             `).join('')}
-            <div class="progreso-semana">
-              <div class="progreso-barra" style="width: 0%"></div>
+            <div class="progreso-semana" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+              <div class="progreso-barra"></div>
             </div>
           </div>
         `;
         container.appendChild(semanaElement);
       });
 
-
-      // Funcionalidad de acordeón
+      // Mejorar la funcionalidad del acordeón
       const titulos = document.querySelectorAll('.semana-titulo');
       titulos.forEach(titulo => {
-        titulo.addEventListener('click', () => {
-          const tareas = titulo.nextElementSibling;
-          const icono = titulo.querySelector('i');
-          if (tareas.style.display === 'block') {
-            tareas.style.display = 'none';
-            icono.className = 'fas fa-chevron-down';
-          } else {
-            tareas.style.display = 'block';
-            icono.className = 'fas fa-chevron-up';
+        titulo.addEventListener('click', () => toggleSemana(titulo));
+        titulo.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleSemana(titulo);
           }
         });
       });
 
-      // Marcar tareas como completadas y actualizar progreso
+      // Mejorar la funcionalidad de marcar tareas
       const checkboxes = document.querySelectorAll('.tarea input[type="checkbox"]');
       checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
           const tarea = e.target.closest('.tarea');
           const semana = e.target.closest('.semana');
-          if (e.target.checked) {
-            tarea.classList.add('tarea-completada');
-          } else {
-            tarea.classList.remove('tarea-completada');
-          }
-          actualizarProgreso(semana);
+          const tareaId = parseInt(e.target.id.replace('tarea-', ''));
+          const semanaNumero = parseInt(semana.querySelector('.semana-titulo').textContent.replace('Semana ', ''));
+          
+          toggleTareaCompletada(tarea, semana, tareaId, semanaNumero);
         });
       });
+
+      // Inicializar el progreso de todas las semanas
+      document.querySelectorAll('.semana').forEach(semana => {
+        actualizarProgreso(semana);
+      });
+    }
+
+    function toggleSemana(titulo) {
+      const tareas = titulo.nextElementSibling;
+      const icono = titulo.querySelector('i');
+      const estaExpandido = tareas.hidden === false;
+      
+      tareas.hidden = estaExpandido;
+      titulo.setAttribute('aria-expanded', !estaExpandido);
+      icono.className = estaExpandido ? 'fas fa-chevron-down' : 'fas fa-chevron-up';
+    }
+
+    function toggleTareaCompletada(tarea, semana, tareaId, semanaNumero) {
+      tarea.classList.toggle('tarea-completada');
+      
+      const tareasCompletadas = localStorage.getItem(`semana-${semanaNumero}-completadas`) || '[]';
+      const tareasCompletadasArray = JSON.parse(tareasCompletadas);
+      
+      const index = tareasCompletadasArray.indexOf(tareaId);
+      if (index === -1) {
+        tareasCompletadasArray.push(tareaId);
+      } else {
+        tareasCompletadasArray.splice(index, 1);
+      }
+      
+      localStorage.setItem(`semana-${semanaNumero}-completadas`, JSON.stringify(tareasCompletadasArray));
+      actualizarProgreso(semana);
     }
 
     function actualizarProgreso(semana) {
       const totalTareas = semana.querySelectorAll('.tarea').length;
       const tareasCompletadas = semana.querySelectorAll('.tarea-completada').length;
       const porcentaje = (tareasCompletadas / totalTareas) * 100;
+      
       const barra = semana.querySelector('.progreso-barra');
+      const progressbar = semana.querySelector('.progreso-semana');
+      
       barra.style.width = `${porcentaje}%`;
+      progressbar.setAttribute('aria-valuenow', porcentaje);
+      progressbar.setAttribute('aria-label', `${Math.round(porcentaje)}% completado`);
     }
 
-    function mostrarContenido(archivo, tipo, id) {
+    async function mostrarContenido(archivo, tipo, id) {
+      const contenedorContenido = document.getElementById(`contenido-${id}`);
       const baseUrl = 'https://raw.githubusercontent.com/Zerox30-dev/AplicacionesMoviles.github.io/main/';
       const url = baseUrl + archivo;
-      const contenidoDiv = document.getElementById(`contenido-${id}`);
-      
-      if (tipo === 'pdf') {
-        window.open(url, '_blank');
-      } else if (tipo === 'docx') {
-        alert('Los archivos DOCX no se pueden visualizar directamente en el navegador. Por favor, descarga el archivo para verlo.');
-      } else if (tipo === 'dart') {
-        fetch(url)
-          .then(response => response.text())
-          .then(data => {
-            contenidoDiv.innerHTML = `<pre class="tarea-contenido-visible"><code>${data}</code></pre>`;
-            contenidoDiv.style.display = contenidoDiv.style.display === 'none' ? 'block' : 'none';
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            contenidoDiv.innerHTML = '<p>Error al cargar el contenido. Por favor, intenta descargarlo.</p>';
-            contenidoDiv.style.display = 'block';
-          });
+
+      try {
+        if (tipo === 'pdf') {
+          window.open(url, '_blank');
+          return;
+        }
+
+        if (tipo === 'docx') {
+          alert('Los archivos DOCX no se pueden visualizar directamente. Por favor, descarga el archivo.');
+          return;
+        }
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Error al cargar el contenido');
+        
+        const contenido = await response.text();
+        contenedorContenido.innerHTML = `
+          <pre class="tarea-contenido-visible"><code>${contenido}</code></pre>
+        `;
+        contenedorContenido.hidden = !contenedorContenido.hidden;
+
+      } catch (error) {
+        console.error('Error:', error);
+        contenedorContenido.innerHTML = `
+          <div class="alert alert-danger">
+            Error al cargar el contenido. Por favor, intenta descargarlo.
+          </div>
+        `;
+        contenedorContenido.hidden = false;
       }
     }
 
