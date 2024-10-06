@@ -123,119 +123,6 @@ li {
   flex-basis: 48%;
 }
 
-.semana {
-  margin-bottom: 20px;
-  background-color: var(--card-background);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  overflow: hidden;
-}
-
-.semana-titulo {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 15px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background-color 0.3s ease;
-}
-
-.semana-titulo:hover {
-  background-color: #3a7bc8;
-}
-
-.tareas {
-  display: none;
-  padding: 15px;
-}
-
-.tarea {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  padding: 15px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.tarea:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.tarea input[type="checkbox"] {
-  margin-right: 15px;
-  margin-top: 3px;
-}
-
-.tarea-contenido {
-  flex-grow: 1;
-}
-
-.tarea-completada .tarea-contenido {
-  text-decoration: line-through;
-  color: #888;
-}
-
-.progreso-semana {
-  margin-top: 15px;
-  height: 10px;
-  background-color: #444;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.progreso-barra {
-  height: 100%;
-  background-color: var(--primary-color);
-  transition: width 0.3s ease;
-}
-
-.tarea-contenido-visible {
-  background-color: #333;
-  border: 1px solid #555;
-  border-radius: 5px;
-  padding: 15px;
-  margin-top: 15px;
-  white-space: pre-wrap;
-  font-family: monospace;
-  max-height: 300px;
-  overflow-y: auto;
-  color: #ddd;
-}
-
-.btn-ver-contenido, .btn-descargar, .btn-ver-github {
-  margin-right: 10px;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.btn-ver-contenido {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-descargar {
-  background-color: #28a745;
-  color: white;
-}
-
-.btn-ver-github {
-  background-color: #333;
-  color: white;
-}
-
-.btn-ver-contenido:hover, .btn-descargar:hover, .btn-ver-github:hover {
-  transform: translateY(-2px);
-  filter: brightness(110%);
-}
-
 footer {
   background-color: var(--secondary-color);
   color: white;
@@ -247,8 +134,11 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .btn-ver-contenido, .btn-descargar, .btn-ver-github {
-    margin-top: 10px;
-    width: 100%;
+  .recursos-container {
+    flex-direction: column;
+  }
+  
+  .recursos-column {
+    flex-basis: 100%;
   }
 }
