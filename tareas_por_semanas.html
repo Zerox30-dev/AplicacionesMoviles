@@ -4,8 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tareas por Semanas - Programación de Aplicaciones Móviles Web</title>  
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- Agregamos las dependencias de React -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   
   <style>
     :root {
@@ -224,6 +228,48 @@
         width: 100%;
       }
     }
+
+    #react-tareas-container .semana {
+  margin-bottom: 20px;
+}
+
+#react-tareas-container .btn-ver-contenido,
+#react-tareas-container .btn-descargar,
+#react-tareas-container .btn-ver-github {
+  margin-right: 10px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#react-tareas-container .btn-ver-contenido {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#react-tareas-container .btn-descargar {
+  background-color: #28a745;
+  color: white;
+}
+
+#react-tareas-container .btn-ver-github {
+  background-color: #333;
+  color: white;
+}
+
+/* Asegurar que los estilos sean consistentes entre React y no-React */
+#react-tareas-container .semana-titulo,
+#tareas-container .semana-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
   </style>
 </head>
 <body>
@@ -237,13 +283,98 @@
     </nav>
   </header>
   <main>
-    <div id="tareas-container">
-      <!-- Las semanas y tareas se generarán dinámicamente aquí -->
-    </div>
+    <div id="react-tareas-container"></div>    
+    
+    <div id="tareas-container"></div>
   </main>
   <footer>
     <p>&copy; 2024 Programación de Aplicaciones Móviles Web</p>
   </footer>
+
+  <script type="text/babel">
+   // Script type="text/babel"
+const TaskCard = ({ task = {
+  descripcion: 'Tarea sin título',
+  enunciado: 'No hay descripción disponible',
+  progress: 0
+} }) => {
+  const [isContentVisible, setIsContentVisible] = React.useState(false);
+  const [isCompleted, setIsCompleted] = React.useState(false);
+
+  return (
+    <div className="semana card">
+      <div className="semana-titulo">
+        <div className="flex items-center">
+          <input 
+            type="checkbox" 
+            checked={isCompleted}
+            onChange={() => setIsCompleted(!isCompleted)}
+            className="mr-4"
+          />
+          <span className={isCompleted ? 'line-through' : ''}>
+            {task.descripcion}
+          </span>
+        </div>
+        <button onClick={() => setIsContentVisible(!isContentVisible)}>
+          <i className={`fas fa-chevron-${isContentVisible ? 'up' : 'down'}`}></i>
+        </button>
+      </div>
+      
+      {isContentVisible && (
+        <div className="tareas">
+          <div className="tarea">
+            <div className="tarea-contenido">
+              <p>{task.enunciado}</p>
+              <div className="mt-4">
+                <button className="btn-ver-contenido">
+                  <i className="fas fa-eye mr-2"></i> Ver Contenido
+                </button>
+                <button className="btn-descargar">
+                  <i className="fas fa-download mr-2"></i> Descargar
+                </button>
+                <button className="btn-ver-github">
+                  <i className="fab fa-github mr-2"></i> Ver en GitHub
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="progreso-semana">
+            <div className="progreso-barra" style={{width: `${task.progress}%`}}></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <div>
+      {tareasData.map((semana, index) => (
+        <div key={index}>
+          <h2>Semana {semana.semana}</h2>
+          {semana.tareas.map((tarea, tareaIndex) => (
+            <TaskCard key={tareaIndex} task={tarea} />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Renderizar la aplicación React
+ReactDOM.render(
+  <App />,
+  document.getElementById('react-tareas-container')
+);
+
+// Mantener la funcionalidad original si es necesario
+if (typeof tareasData !== 'undefined') {
+  generarTareas();
+}
+  </script>
+
+
 
   <script>
     const tareasData = [
