@@ -365,9 +365,178 @@
           }
         ]
 
-        }
+        },
 
-    ];
+        {
+  semana: 7,
+  tareas: [
+    {
+      id: 19,
+      descripcion: 'Proyecto 01',
+      archivo: 'tareas/semana07/proyecto01.dart',
+      tipo: 'dart',
+      enunciado: `
+      <strong>Enunciado:</strong> En una universidad, los alumnos están clasificados en cuatro categorías. A cada categoría le corresponde una pensión mensual distinta dada en la siguiente tabla:
+      <table>
+        <tr>
+          <th>Categoría</th>
+          <th>Pensión</th>
+        </tr>
+        <tr>
+          <td>A</td>
+          <td>S/. 550</td>
+        </tr>
+        <tr>
+          <td>B</td>
+          <td>S/. 500</td>
+        </tr>
+        <tr>
+          <td>C</td>
+          <td>S/. 460</td>
+        </tr>
+        <tr>
+          <td>D</td>
+          <td>S/. 400</td>
+        </tr>
+      </table>
+      Semestralmente, la universidad efectúa rebajas en las pensiones de sus estudiantes a partir del segundo ciclo basándose en el promedio ponderado del ciclo anterior en porcentajes dados en la tabla siguiente:
+      <table>
+        <tr>
+          <th>Promedio</th>
+          <th>Descuento</th>
+        </tr>
+        <tr>
+          <td>0 a 13.99</td>
+          <td>No hay descuento</td>
+        </tr>
+        <tr>
+          <td>14.00 a 15.99</td>
+          <td>10 %</td>
+        </tr>
+        <tr>
+          <td>16.00 a 17.99</td>
+          <td>12 %</td>
+        </tr>
+        <tr>
+          <td>18.00 a 20.00</td>
+          <td>15 %</td>
+        </tr>
+      </table>
+      Dado el promedio ponderado y la categoría de un estudiante, diseñe un programa que determine cuánto de rebaja recibirá sobre su pensión actual y a cuánto asciende su nueva pensión.
+      `
+    },
+    {
+      id: 20,
+      descripcion: 'Proyecto 02',
+      archivo: 'tareas/semana07/proyecto02.dart',
+      tipo: 'dart',
+      enunciado: `
+      <strong>Enunciado:</strong> Una empresa evalúa a sus empleados bajo dos criterios: puntualidad y rendimiento. En cada caso, el empleado recibe un puntaje que va de 1 a 10, de acuerdo con los siguientes criterios:
+      <strong>Puntaje por puntualidad:</strong>
+      <table>
+        <tr>
+          <th>Minutos de tardanza</th>
+          <th>Puntaje</th>
+        </tr>
+        <tr><td>0</td><td>10</td></tr>
+        <tr><td>1 a 2</td><td>8</td></tr>
+        <tr><td>3 a 5</td><td>6</td></tr>
+        <tr><td>6 a 9</td><td>4</td></tr>
+        <tr><td>Más de 9</td><td>0</td></tr>
+      </table>
+      <strong>Puntaje por rendimiento:</strong>
+      <table>
+        <tr>
+          <th>Observaciones efectuadas</th>
+          <th>Puntaje</th>
+        </tr>
+        <tr><td>0</td><td>10</td></tr>
+        <tr><td>1</td><td>8</td></tr>
+        <tr><td>2</td><td>5</td></tr>
+        <tr><td>3</td><td>1</td></tr>
+        <tr><td>Más de 3</td><td>0</td></tr>
+      </table>
+      El puntaje total del empleado es la suma del puntaje por puntualidad más el puntaje por rendimiento. Basándose en el puntaje total, el empleado recibe una bonificación anual de acuerdo con la siguiente tabla:
+      <table>
+        <tr>
+          <th>Puntaje total</th>
+          <th>Bonificación</th>
+        </tr>
+        <tr><td>Menos de 11</td><td>S/. 2.5 por punto</td></tr>
+        <tr><td>11 a 13</td><td>S/. 5.0 por punto</td></tr>
+        <tr><td>14 a 16</td><td>S/. 7.5 por punto</td></tr>
+        <tr><td>17 a 19</td><td>S/. 10.0 por punto</td></tr>
+        <tr><td>20</td><td>S/. 12.5 por punto</td></tr>
+      </table>
+      Dados los minutos de tardanza y el número de observaciones de un empleado, diseñe un programa que determine el puntaje por puntualidad, el puntaje por rendimiento, el puntaje total y la bonificación que le corresponden.
+      `
+    },
+    {
+      id: 21,
+      descripcion: 'Proyecto 03',
+      archivo: 'tareas/semana07/proyecto03.dart',
+      tipo: 'dart',
+      enunciado: `
+      <strong>Enunciado:</strong> Una dulcería vende chocolates a los precios dados en la siguiente tabla:
+      <table>
+        <tr>
+          <th>Tipo de chocolate</th>
+          <th>Precio unitario</th>
+        </tr>
+        <tr><td>Primor</td><td>S/. 8.5</td></tr>
+        <tr><td>Dulzura</td><td>S/. 10.0</td></tr>
+        <tr><td>Tentación</td><td>S/. 7.0</td></tr>
+        <tr><td>Explosión</td><td>S/. 12.5</td></tr>
+      </table>
+      Como oferta, la tienda aplica un porcentaje de descuento sobre el importe de la compra, basándose en la cantidad de chocolates adquiridos, de acuerdo con la siguiente tabla:
+      <table>
+        <tr>
+          <th>Cantidad de chocolates</th>
+          <th>Descuento</th>
+        </tr>
+        <tr><td>&lt; 5</td><td>4.0%</td></tr>
+        <tr><td>≥ 5 y &lt; 10</td><td>6.5%</td></tr>
+        <tr><td>≥ 10 y &lt; 15</td><td>9.0%</td></tr>
+        <tr><td>≥ 15</td><td>11.5%</td></tr>
+      </table>
+      Adicionalmente, si el importe a pagar es no menor de S/. 250, la tienda obsequia 3 caramelos por cada chocolate; en caso contrario, obsequia 2 caramelos por cada chocolate.
+      Dado el tipo de chocolate y la cantidad de unidades adquiridas, diseñe un programa que determine el importe de la compra, el importe del descuento, el importe a pagar y la cantidad de caramelos de obsequio.
+      `
+    },
+    {
+      id: 22,
+      descripcion: 'Proyecto 04',
+      archivo: 'tareas/semana07/proyecto04.dart',
+      tipo: 'dart',
+      enunciado: `
+      <strong>Enunciado:</strong> Una tienda vende tres tipos de productos a los precios dados en la siguiente tabla:
+      <table>
+        <tr>
+          <th>Producto</th>
+          <th>Precio</th>
+        </tr>
+        <tr><td>P1</td><td>S/. 15.0</td></tr>
+        <tr><td>P2</td><td>S/. 17.5</td></tr>
+        <tr><td>P3</td><td>S/. 20.0</td></tr>
+      </table>
+      Como oferta, la tienda ofrece un regalo de acuerdo con la siguiente tabla:
+      <table>
+        <tr>
+          <th>Unidades adquiridas</th>
+          <th>Regalo</th>
+        </tr>
+        <tr><td>Menos de 26</td><td>Un lapicero</td></tr>
+        <tr><td>26 a 50</td><td>Un cuaderno</td></tr>
+        <tr><td>Más de 50</td><td>Una agenda</td></tr>
+      </table>
+      Dado el tipo de producto y la cantidad de unidades adquiridas, diseñe un programa que determine el importe a pagar y el regalo.
+      `
+    }
+  ]
+}
+
+
+    ]
 
     function generarTareas() {
       const container = document.getElementById('tareas-container');
